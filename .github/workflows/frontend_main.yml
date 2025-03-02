@@ -25,15 +25,13 @@ jobs:
         with:
           node-version: ${{matrix.node-version}}
 
-      - name: Navigate to client folder
-        run: cd client
-        shell: bash
-
       - name: Install dependencies
+        working-directory: ./client
         run: npm install
 
       #- name: Run tests
        # run: npm test
 
       - name: Build project
+        working-directory: ./client
         run: npm run build
