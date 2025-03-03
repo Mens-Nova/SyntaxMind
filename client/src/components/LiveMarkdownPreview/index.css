@@ -25,6 +25,7 @@
     min-width: 200px;
     border-radius: 10px;
     padding: 20px;
+    max-height: 100%;
     border: 1px solid #ccc;
     background-color: #fafbfc;
 }
@@ -53,6 +54,7 @@
 .box-markdown_preview {
     min-width: 200px;
     border-radius: 10px;
+    max-height: 100%;
     padding: 20px;
     border: 1px solid #c898e5;
     background-color: #f9eefb;
