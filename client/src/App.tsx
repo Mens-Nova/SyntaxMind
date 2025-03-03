@@ -1,14 +1,13 @@
-import {LiveMarkdownPreview} from "./components/LiveMarkdownPreview";
+import { LiveMarkdownPreview } from "./components/LiveMarkdownPreview/";
 
 function App() {
-
-  return (
-    <>
-      <div style={{width:"100%"}}>
-        <LiveMarkdownPreview />
-      </div>
-    </>
-  )
+    return (
+        <>
+            <div style={{ width: "100%" }}>
+                <LiveMarkdownPreview />
+            </div>
+        </>
+    );
 }
 
-export default App
+export default App;
