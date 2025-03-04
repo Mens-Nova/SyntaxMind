@@ -1,135 +1,179 @@
 .box-container {
-  display: flex;
-  height: 100vh;
-  padding: 20px;
-  gap: 5px;
-  position: relative;
+    display: flex;
+    height: 100vh;
+    padding: 20px;
+    gap: 5px;
+    position: relative;
 }
 
 .box-container .resize-reset_button {
-  position: absolute;
-  bottom: 40px;
-  right: 40px;
-  padding: 10px 30px;
-  color: #7606c2;
-  font-weight: bold;
-  background-color: rgba(120, 4, 195, 0.1);
-  border: 1px solid #7606c2;
-  font-size: 30px;
-  border-radius: 20px;
-  cursor: pointer;
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    padding: 10px 30px;
+    color: #7606c2;
+    font-weight: bold;
+    background-color: rgba(120, 4, 195, 0.1);
+    border: 1px solid #7606c2;
+    font-size: 30px;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
 /* MARKDOWN INPUT */
 .box-markdown_input {
-  min-width: 200px;
-  border-radius: 10px;
-  padding: 20px;
-  max-height: 100%;
-  border: 1px solid #ccc;
-  background-color: #fafbfc;
-  overflow: hidden;
+    min-width: 200px;
+    border-radius: 10px;
+    padding: 20px;
+    max-height: 100%;
+    border: 1px solid #ccc;
+    background-color: #fafbfc;
+    overflow: hidden;
 }
 
 .box-markdown_input > h2 {
-  font-size: 20px;
-  background-color: #232323;
-  color: #fff;
-  width: fit-content;
-  padding: 10px 30px;
-  border-radius: 20px;
+    font-size: 20px;
+    background-color: #232323;
+    color: #fff;
+    width: fit-content;
+    padding: 10px 30px;
+    border-radius: 20px;
 }
 
 .box-markdown_input > textarea {
-  width: 100%;
-  height: calc(97% - 50px);
-  outline: none;
-  border: none;
-  resize: none;
-  font-size: 24px;
-  background-color: transparent;
-  margin-top: 30px;
-  padding: 10px 0;
-  font-family: monospace; /* Matches code style */
+    width: 100%;
+    height: calc(97% - 50px);
+    outline: none;
+    border: none;
+    resize: none;
+    font-size: 24px;
+    background-color: transparent;
+    margin-top: 30px;
+    padding: 10px 0;
+    font-family: monospace; /* Matches code style */
 }
 
 /* MARKDOWN PREVIEW */
 .box-markdown_preview {
-  min-width: 200px;
-  border-radius: 10px;
-  max-height: 100%;
-  padding: 20px;
-  border: 1px solid #c898e5;
-  background-color: #f9eefb;
-  color: #b874dd;
+    min-width: 200px;
+    border-radius: 10px;
+    max-height: 100%;
+    padding: 20px;
+    border: 1px solid #c898e5;
+    background-color: #f9eefb;
+    color: #b874dd;
 }
 
 .box-markdown_preview > h2 {
-  color: #fff;
-  background-color: #7606c2;
-  width: fit-content;
-  font-size: 20px;
-  padding: 10px 30px;
-  border-radius: 20px;
+    color: #fff;
+    background-color: #7606c2;
+    width: fit-content;
+    font-size: 20px;
+    padding: 10px 30px;
+    border-radius: 20px;
 }
 
 .box-markdown_insert-html {
-  width: 100%;
-  height: calc(97% - 50px);
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-y: auto;
-  font-size: 24px;
-  margin-top: 30px;
+    width: 100%;
+    height: calc(97% - 50px);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-y: auto;
+    font-size: 24px;
+    margin-top: 30px;
+    border: 1px solid blue;
+    padding: 20px;
 }
 
-/* Code Block Styling (Fenced Code) */
-.box-markdown_insert-html pre {
-  background: #f5f5f5;
-  padding: 10px;
-  border-radius: 5px;
-  overflow-x: auto;
-  border: 1px solid #c898e5;
+.box-markdown_insert-html p code {
+    background-color: #ccc;
+    color: red;
+    padding: 0 10px;
 }
 
-/* Base Code Styling (Inline and Block) */
-.box-markdown_insert-html code {
-  font-family: monospace;
-  background: #f5f5f5;
-  padding: 2px 4px;
-  border-radius: 3px;
+/* ########## Highlight Syntax Colors ##########*/
+
+/* Container for the code block */
+pre {
+    background-color: #1e1e1e; /* Dark background */
+    padding: 16px; /* Padding around the code */
+    border-radius: 6px; /* Rounded corners */
+    overflow-x: auto; /* Horizontal scrolling for long lines */
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; /* Monospace font */
+    font-size: 24px; /* Font size */
+    line-height: 1.5; /* Line height */
+    color: #d4d4d4; /* Default text color */
+    margin: 0 0 16px 0; /* Margin at the bottom */
+    border: 1px solid #333; /* Dark border */
 }
 
-/* Highlight.js Styles */
-.box-markdown_insert-html code.hljs {
-  color: #24292e; /* Base text color */
+/* Syntax highlighting for JavaScript */
+.language-javascript {
+    background-color: transparent; /* No background for code inside <pre> */
+    padding: 0; /* No padding for code inside <pre> */
+    border: none; /* No border for code inside <pre> */
+    color: inherit; /* Inherit text color from <pre> */
+    font-family: inherit; /* Inherit monospace font from <pre> */
+    font-size: inherit; /* Inherit font size from <pre> */
 }
 
-/* Inline Code Specific Styling */
-.box-markdown_insert-html code.hljs:not(pre code) {
-  display: inline;
-  padding: 2px 4px;
-  background: #f5f5f5;
-  border-radius: 3px;
+/* Keywords (e.g., function, return, if, else) */
+.language-javascript .token.keyword {
+    color: #569cd6; /* Blue */
 }
 
-/* Block Code Specific Styling */
-.box-markdown_insert-html pre code.hljs {
-  display: block;
-  padding: 0; /* Padding handled by pre */
+/* Strings (e.g., "Hello, world!") */
+.language-javascript .token.string {
+    color: #ce9178; /* Orange */
 }
 
-/* Highlight.js Syntax Colors (Customized to Match Your Theme) */
+/* Functions and method names */
+.language-javascript .token.function {
+    color: #dcdcaa; /* Yellow */
+}
+
+/* Numbers (e.g., 42, 3.14) */
+.language-javascript .token.number {
+    color: #b5cea8; /* Green */
+}
+
+/* Operators (e.g., +, -, *, /) */
+.language-javascript .token.operator {
+    color: #d4d4d4; /* Light gray */
+}
+
+/* Comments (e.g., // This is a comment) */
+.language-javascript .token.comment {
+    color: #6a9955; /* Green */
+    font-style: italic; /* Italicize comments */
+}
+
+/* Punctuation (e.g., {}, (), [], ;) */
+.language-javascript .token.punctuation {
+    color: #d4d4d4; /* Light gray */
+}
+
+/* Variables and identifiers */
+.language-javascript .token.variable {
+    color: #9cdcfe; /* Light blue */
+}
+
+/* Class names */
+.language-javascript .token.class-name {
+    color: #4ec9b0; /* Teal */
+}
+
+/*IDK WHAT IS THIS I JUST COPY THIS FOR FUTURE USE*/
 .hljs-comment,
 .hljs-quote {
-  color: #6a737d;
-  font-style: italic;
+    color: #6a737d;
+    font-style: italic;
 }
 
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-subst {
-  color: #7606c2; /* Matches your purple theme */
+    color: #7606c2; /* Matches your purple theme */
 }
 
 .hljs-number,
@@ -137,92 +181,92 @@
 .hljs-variable,
 .hljs-template-variable,
 .hljs-tag .hljs-attr {
-  color: #005cc5;
+    color: #005cc5;
 }
 
 .hljs-string,
 .hljs-doctag {
-  color: #b874dd; /* Matches preview text color */
+    color: #b874dd; /* Matches preview text color */
 }
 
 .hljs-title,
 .hljs-section,
 .hljs-selector-id {
-  color: #6f42c1;
-  font-weight: bold;
+    color: #6f42c1;
+    font-weight: bold;
 }
 
 .hljs-subst {
-  font-weight: normal;
+    font-weight: normal;
 }
 
 .hljs-type,
 .hljs-class .hljs-title {
-  color: #6f42c1;
+    color: #6f42c1;
 }
 
 .hljs-tag,
 .hljs-name,
 .hljs-attribute {
-  color: #22863a;
+    color: #22863a;
 }
 
 .hljs-regexp,
 .hljs-link {
-  color: #032f62;
+    color: #032f62;
 }
 
 .hljs-symbol,
 .hljs-bullet {
-  color: #e36209;
+    color: #e36209;
 }
 
 .hljs-built_in,
 .hljs-builtin-name {
-  color: #6f42c1;
+    color: #6f42c1;
 }
 
 .hljs-meta {
-  color: #6a737d;
+    color: #6a737d;
 }
 
 .hljs-deletion {
-  background: #ffeef0;
+    background: #ffeef0;
 }
 
 .hljs-addition {
-  background: #f0fff4;
+    background: #f0fff4;
 }
 
 .hljs-emphasis {
-  font-style: italic;
+    font-style: italic;
 }
 
 .hljs-strong {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 /* RESIZE HANDLE */
 .resize-handle {
-  width: 10px;
-  cursor: ew-resize;
-  background-color: rgba(0, 0, 0, 0.2);
-  transition: background-color 0.2s;
+    width: 10px;
+    cursor: ew-resize;
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s;
 }
 
 .resize-handle:hover {
-  background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 /* MOBILE LAYOUT */
 @media (max-width: 800px) {
-  .box-container {
-    flex-direction: column;
-  }
+    .box-container {
+        flex-direction: column;
+    }
 
-  .box-markdown_input,
-  .box-markdown_preview {
-    width: 100%;
-    height: 50vh;
-  }
+    .box-markdown_input,
+    .box-markdown_preview {
+        width: 100%;
+        height: 50vh;
+    }
 }
