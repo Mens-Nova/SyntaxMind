@@ -1,4 +1,11 @@
 {
+    "compilerOptions": {
+    "jsx": "react",       // Enable JSX support
+    "esModuleInterop": true, // Handle ES modules properly
+    "moduleResolution": "node",
+    "strict": true,
+    "skipLibCheck": true
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },

@@ -1,12 +1,8 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
-import "./index.css";
 
-marked.setOptions({
-    breaks: true,
-    gfm: true,
-});
+
 
 export const LiveMarkdownPreview = () => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -47,6 +43,13 @@ export const LiveMarkdownPreview = () => {
     };
 
     useEffect(() => {
+      marked.setOptions({
+        breaks: true,
+        gfm: true,
+      });
+    },[])
+
+    useEffect(() => {
         const handleWindowResize = () => {
             const isNowColumn = window.innerWidth <= 800;
             setIsColumnLayout(isNowColumn);
@@ -81,11 +84,15 @@ export const LiveMarkdownPreview = () => {
     }, [isResizing, handleMouseMove, handleMouseUp]);
 
     useEffect(() => {
+        let isMounted = true;
+
         const renderMarkdown = async () => {
             const parsedMarkdown = await marked(markdown);
-            setHtmlContent(DOMPurify.sanitize(parsedMarkdown));
+            if(isMounted) setHtmlContent(DOMPurify.sanitize(parsedMarkdown));
         };
         renderMarkdown();
+
+        return () => { isMounted = false; }
     }, [markdown]);
 
     useEffect(() => {
@@ -101,6 +108,7 @@ export const LiveMarkdownPreview = () => {
             ref={containerRef}
             className="box-container"
             style={{ flexDirection: isColumnLayout ? "column" : "row", position: "relative" }}
+            data-testid="markdown-container"
         >
             {/* Markdown Input */}
             <div
@@ -112,7 +120,12 @@ export const LiveMarkdownPreview = () => {
             </div>
 
             {/* Resize Handle */}
-            {!isColumnLayout && <div className="resize-handle" onMouseDown={handleMouseDown} />}
+            {!isColumnLayout && 
+              <div 
+                className="resize-handle" 
+                onMouseDown={handleMouseDown} 
+                data-testid="resize-handle"
+              />}
 
             {/* HTML Preview */}
             <div
@@ -120,7 +133,7 @@ export const LiveMarkdownPreview = () => {
                 style={{ width: isColumnLayout ? "100%" : `calc(100% - ${leftWidth}px)`, height: isColumnLayout ? "50vh" : "100vh" }}
             >
                 <h2>Preview</h2>
-                <div className="box-markdown_insert-html" dangerouslySetInnerHTML={{ __html: htmlContent }} />
+                <div className="box-markdown_insert-html" dangerouslySetInnerHTML={{ __html: htmlContent }} data-testid="preview-content" />
             </div>
 
             {/* Reset Button */}
