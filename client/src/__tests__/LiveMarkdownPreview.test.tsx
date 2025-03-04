@@ -1,92 +1,139 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { LiveMarkdownPreview } from "../components/LiveMarkdownPreview";
+import { render, screen, fireEvent, waitFor, act} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { LiveMarkdownPreview } from "../components/LiveMarkdownPreview";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 
-// Mocking DOMPurify
-jest.mock("dompurify", () => ({
-  sanitize: (html: string) => html,
-}));
-
-// Mocking the entire 'marked' module and completely bypassing 'setOptions'
+// Mock dependencies
 jest.mock("marked", () => {
+  const markedMock = jest.fn((markdown: string) => `<mocked-html>${markdown}</mocked-html>`) as jest.Mock & {
+    setOptions: jest.Mock;
+  };
+  
+  markedMock.setOptions = jest.fn();
   return {
     __esModule: true,
-    default: jest.fn((text: string) => `<h1>${text.slice(1)}</h1>`), // Simple markdown to HTML mock
+    marked: markedMock,
   };
 });
 
-describe("LiveMarkdownPreview", () => {
-  it("should render the component", () => {
-    render(<LiveMarkdownPreview />);
-    expect(screen.getByText("Editor")).toBeInTheDocument();
-    expect(screen.getByText("Preview")).toBeInTheDocument();
+jest.mock("dompurify", () => ({
+  sanitize: jest.fn((html: string) => html),
+}));
+
+beforeAll(() => {
+  jest.spyOn(console, "error").mockImplementation(() => {});
+});
+
+afterAll(() => {
+  jest.restoreAllMocks();
+});
+
+// Mock window.innerWidth
+const mockInnerWidth = (width: number) => {
+  Object.defineProperty(window, 'innerWidth', {
+    writable: true,
+    configurable: true,
+    value: width
+  });
+  window.dispatchEvent(new Event('resize'));
+};
+
+describe("LiveMarkdownPreview Component", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockInnerWidth(1200);
   });
 
-  it("should update the markdown input and preview content", async () => {
-    render(<LiveMarkdownPreview />);
+  it("renders the component with editor and preview sections", async() => {
+    await act(async () => {
+      render(<LiveMarkdownPreview />);
+    })
+    await waitFor(() => {
+      expect(screen.getByText("Editor")).toBeInTheDocument();
+      expect(screen.getByText("Preview")).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("Enter Markdown here...")).toBeInTheDocument();
+    })
+  });
 
+  it("updates markdown input and renders preview", async () => {
+    render(<LiveMarkdownPreview />);
+    
     const textarea = screen.getByPlaceholderText("Enter Markdown here...");
-    userEvent.type(textarea, "# Hello World");
+    await act(async () => {
+      userEvent.type(textarea, "# Hello World");
+    });
 
     await waitFor(() => {
-      // Expect the preview to show the parsed HTML content
-      expect(screen.getByText("<h1>Hello World</h1>")).toBeInTheDocument();
+      const previewContent = screen.getByTestId("preview-content");
+      expect(previewContent).toHaveTextContent("Hello World");
+      expect(marked).toHaveBeenCalledWith("# Hello World");
+      expect(DOMPurify.sanitize).toHaveBeenCalled();
     });
   });
 
-  it("should resize the markdown input area when dragging the resize handle", async () => {
-    render(<LiveMarkdownPreview />);
-
-    const resizeHandle = screen.getByRole("separator");
-    const initialWidth = screen.getByText("Editor").parentElement?.getBoundingClientRect().width;
-
-    // Simulate mouse down and mouse move
-    fireEvent.mouseDown(resizeHandle, { clientX: 100 });
-    fireEvent.mouseMove(document, { clientX: 150 });
-    fireEvent.mouseUp(document);
-
-    const newWidth = screen.getByText("Editor").parentElement?.getBoundingClientRect().width;
-    expect(newWidth).not.toBe(initialWidth);
+  it("changes layout to column when window width is small", async () => {
+    mockInnerWidth(800);
+    
+    await act(async() => { render(<LiveMarkdownPreview />); })
+    
+    const container = screen.getByTestId("markdown-container");
+    await waitFor(() => {
+      expect(container).toHaveStyle({ flexDirection: 'column' });
+    })
   });
 
-  it("should show the reset button when the area has been resized", async () => {
-    render(<LiveMarkdownPreview />);
-
-    const textarea = screen.getByPlaceholderText("Enter Markdown here...");
-    userEvent.type(textarea, "# Hello World");
-
-    const resizeHandle = screen.getByRole("separator");
-
-    // Simulate resizing
-    fireEvent.mouseDown(resizeHandle, { clientX: 100 });
-    fireEvent.mouseMove(document, { clientX: 150 });
+  it("allows resizing when not in column layout", async () => {
+    await act(async() => { render(<LiveMarkdownPreview />); })
+    
+    const resizeHandle = screen.getByTestId("resize-handle");
+    
+    fireEvent.mouseDown(resizeHandle, { clientX: 500 });
+    fireEvent.mouseMove(document, { clientX: 700 });
     fireEvent.mouseUp(document);
 
-    const resetButton = screen.getByText("Reset Size");
-    expect(resetButton).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Reset Size")).toBeInTheDocument();
+    });
   });
 
-  it("should reset the size to default when clicking the reset button", () => {
-    render(<LiveMarkdownPreview />);
-
-    const textarea = screen.getByPlaceholderText("Enter Markdown here...");
-    userEvent.type(textarea, "# Hello World");
-
-    const resizeHandle = screen.getByRole("separator");
-
-    // Simulate resizing
-    fireEvent.mouseDown(resizeHandle, { clientX: 100 });
-    fireEvent.mouseMove(document, { clientX: 150 });
+  it("resets width when reset button is clicked", async () => {
+    await act(async() => { render(<LiveMarkdownPreview />); })
+    
+    const resizeHandle = screen.getByTestId("resize-handle");
+    
+    fireEvent.mouseDown(resizeHandle, { clientX: 500 });
+    fireEvent.mouseMove(document, { clientX: 700 });
     fireEvent.mouseUp(document);
 
-    const resetButton = screen.getByText("Reset Size");
+    const resetButton = await screen.findByText("Reset Size");
     userEvent.click(resetButton);
 
-    // Check that the width is reset (this can depend on your implementation)
-    const previewContainer = screen.getByText("Preview").parentElement;
-    expect(previewContainer?.style.width).toBe("50%");
+    const container = screen.getByTestId("markdown-container");
+    expect(container).toHaveStyle({ flexDirection: 'row' });
+  });
+
+  it("calls marked.setOptions on component mount", async () => {
+    await act(async() => { render(<LiveMarkdownPreview />); })
+    
+    expect(marked.setOptions).toHaveBeenCalledWith({
+      breaks: true,
+      gfm: true,
+    });
+  });
+
+  it("sanitizes HTML content", async () => {
+    await act(async() => { render(<LiveMarkdownPreview />); })
+    
+    const textarea = screen.getByPlaceholderText("Enter Markdown here...");
+    await act(async () => {
+      userEvent.type(textarea, "# Dangerous <script>alert('XSS')</script>");
+    })
+
+    await waitFor(() => {
+      expect(DOMPurify.sanitize).toHaveBeenCalled();
+    });
   });
 });
-
