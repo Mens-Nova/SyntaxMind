@@ -1,8 +1,13 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
+import hljs from "highlight.js";
 
-
+declare module "marked" {
+  interface MarkedOptions{
+    highlight?: (code: string, language: string) => string;
+  }
+}
 
 export const LiveMarkdownPreview = () => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -13,10 +18,12 @@ export const LiveMarkdownPreview = () => {
     const [hasResized, setHasResized] = useState(false);
     const [htmlContent, setHtmlContent] = useState("");
     const [initialRatio, setInitialRatio] = useState(0.5);
-
+    
     const MIN_WIDTH = 400;
     const DEFAULT_WIDTH = window.innerWidth * initialRatio;
 
+    const showResetButton = !isColumnLayout && hasResized && leftWidth !== DEFAULT_WIDTH;
+    
     const handleMouseDown = (e: React.MouseEvent) => {
         e.preventDefault();
         setIsResizing(true);
@@ -42,10 +49,16 @@ export const LiveMarkdownPreview = () => {
         setHasResized(false);
     };
 
+
     useEffect(() => {
       marked.setOptions({
         breaks: true,
         gfm: true,
+        highlight: (code, language) => {
+          const validLanguage = hljs.getLanguage(language) ? language : "plaintext";
+          const highlighted = hljs.highlight(code, { language: validLanguage }).value;
+          return `<pre><code className="hljs language-${validLanguage}">${highlighted}</code></pre>`;
+        }
       });
     },[])
 
@@ -88,7 +101,8 @@ export const LiveMarkdownPreview = () => {
 
         const renderMarkdown = async () => {
             const parsedMarkdown = await marked(markdown);
-            if(isMounted) setHtmlContent(DOMPurify.sanitize(parsedMarkdown));
+            const sanitizedHtml = DOMPurify.sanitize(parsedMarkdown);
+            if(isMounted) setHtmlContent(sanitizedHtml);
         };
         renderMarkdown();
 
@@ -101,7 +115,8 @@ export const LiveMarkdownPreview = () => {
         }
     }, [leftWidth, hasResized]);
 
-    const showResetButton = !isColumnLayout && hasResized && leftWidth !== DEFAULT_WIDTH;
+    
+
 
     return (
         <div

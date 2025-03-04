@@ -5,11 +5,10 @@ import userEvent from "@testing-library/user-event";
 import { LiveMarkdownPreview } from "../components/LiveMarkdownPreview";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
-
 // Mock dependencies
 jest.mock("marked", () => {
   const markedMock = jest.fn((markdown: string) => `<mocked-html>${markdown}</mocked-html>`) as jest.Mock & {
-    setOptions: jest.Mock;
+    setOptions: jest.Mock
   };
   
   markedMock.setOptions = jest.fn();
@@ -121,6 +120,7 @@ describe("LiveMarkdownPreview Component", () => {
     expect(marked.setOptions).toHaveBeenCalledWith({
       breaks: true,
       gfm: true,
+      highlight: expect.any(Function)
     });
   });
 
