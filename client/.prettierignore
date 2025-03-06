@@ -2,4 +2,7 @@ node_modules/
 *.json
 *.mjs
 *.md
-
+eslint.config.js
+jest.config.ts
+src/vite-env.d.ts
+vite.config.ts
