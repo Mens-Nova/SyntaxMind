@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import hljs from "highlight.js";
+import { WordAndCharCounter } from "../WordAndCharCounter";
 
 declare module "marked" {
     interface MarkedOptions {
@@ -107,7 +108,6 @@ export const LiveMarkdownPreview = () => {
 
         const renderMarkdown = async () => {
             const parsedMarkdown = await marked(markdown);
-            console.log(parsedMarkdown);
             const sanitizedHtml = DOMPurify.sanitize(parsedMarkdown);
             if (isMounted) setHtmlContent(sanitizedHtml);
         };
@@ -163,8 +163,9 @@ export const LiveMarkdownPreview = () => {
                     className="box-markdown_insert-html"
                     dangerouslySetInnerHTML={{ __html: htmlContent }}
                     data-testid="preview-content"
-                    style={{ whiteSpace: "pre-wrap" }} // Preserve whitespace and line breaks
+                    style={{ whiteSpace: "pre-wrap" }}
                 />
+                <WordAndCharCounter htmlContent={htmlContent} />
             </div>
 
             {/* Reset Button */}
