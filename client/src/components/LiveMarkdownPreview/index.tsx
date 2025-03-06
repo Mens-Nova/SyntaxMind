@@ -4,9 +4,9 @@ import DOMPurify from "dompurify";
 import hljs from "highlight.js";
 
 declare module "marked" {
-  interface MarkedOptions{
-    highlight?: (code: string, language: string) => string;
-  }
+    interface MarkedOptions {
+        highlight?: (code: string, language: string) => string;
+    }
 }
 
 export const LiveMarkdownPreview = () => {
@@ -18,16 +18,20 @@ export const LiveMarkdownPreview = () => {
     const [hasResized, setHasResized] = useState(false);
     const [htmlContent, setHtmlContent] = useState("");
     const [initialRatio, setInitialRatio] = useState(0.5);
-    
+    const [isClicked, setIsClicked] = useState(false);
+    // [TODO]:  Add animation on reset resize
+    //const [isReseting, setIsReseting] = useState(false);
+
     const MIN_WIDTH = 400;
     const DEFAULT_WIDTH = window.innerWidth * initialRatio;
 
     const showResetButton = !isColumnLayout && hasResized && leftWidth !== DEFAULT_WIDTH;
-    
+
     const handleMouseDown = (e: React.MouseEvent) => {
         e.preventDefault();
         setIsResizing(true);
         setHasResized(true);
+        setIsClicked(true);
     };
 
     const handleMouseMove = useCallback(
@@ -41,7 +45,10 @@ export const LiveMarkdownPreview = () => {
         [isResizing, isColumnLayout],
     );
 
-    const handleMouseUp = useCallback(() => setIsResizing(false), []);
+    const handleMouseUp = useCallback(() => {
+        setIsResizing(false);
+        setIsClicked(false);
+    }, []);
 
     const handleReset = () => {
         setLeftWidth(window.innerWidth * 0.5);
@@ -49,18 +56,17 @@ export const LiveMarkdownPreview = () => {
         setHasResized(false);
     };
 
-
     useEffect(() => {
-      marked.setOptions({
-        breaks: true,
-        gfm: true,
-        highlight: (code, language) => {
-          const validLanguage = hljs.getLanguage(language) ? language : "plaintext";
-          const highlighted = hljs.highlight(code, { language: validLanguage }).value;
-          return `<pre><code className="hljs language-${validLanguage}">${highlighted}</code></pre>`;
-        }
-      });
-    },[])
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+            highlight: (code, language) => {
+                const validLanguage = hljs.getLanguage(language) ? language : "plaintext";
+                const highlighted = hljs.highlight(code, { language: validLanguage }).value;
+                return `<pre><code className="hljs language-${validLanguage}">${highlighted}</code></pre>`;
+            },
+        });
+    }, []);
 
     useEffect(() => {
         const handleWindowResize = () => {
@@ -101,12 +107,15 @@ export const LiveMarkdownPreview = () => {
 
         const renderMarkdown = async () => {
             const parsedMarkdown = await marked(markdown);
+            console.log(parsedMarkdown);
             const sanitizedHtml = DOMPurify.sanitize(parsedMarkdown);
-            if(isMounted) setHtmlContent(sanitizedHtml);
+            if (isMounted) setHtmlContent(sanitizedHtml);
         };
         renderMarkdown();
 
-        return () => { isMounted = false; }
+        return () => {
+            isMounted = false;
+        };
     }, [markdown]);
 
     useEffect(() => {
@@ -114,9 +123,6 @@ export const LiveMarkdownPreview = () => {
             setInitialRatio(leftWidth / window.innerWidth);
         }
     }, [leftWidth, hasResized]);
-
-    
-
 
     return (
         <div
@@ -128,19 +134,24 @@ export const LiveMarkdownPreview = () => {
             {/* Markdown Input */}
             <div
                 className="box-markdown_input"
-                style={{ width: isColumnLayout ? "100%" : `${leftWidth}px`, height: isColumnLayout ? "50vh" : "100vh" }}
+                style={{
+                    width: isColumnLayout ? "100%" : `${leftWidth}px`,
+                    height: isColumnLayout ? "50vh" : "100vh",
+                }}
             >
                 <h2>Editor</h2>
-                <textarea value={markdown} onChange={(e) => setMarkdown(e.target.value)} placeholder="Enter Markdown here..." />
+                <textarea
+                    value={markdown}
+                    onChange={(e) => setMarkdown(e.target.value)}
+                    placeholder="Enter Markdown here..."
+                    style={{ whiteSpace: "pre-wrap" }}
+                />
             </div>
 
             {/* Resize Handle */}
-            {!isColumnLayout && 
-              <div 
-                className="resize-handle" 
-                onMouseDown={handleMouseDown} 
-                data-testid="resize-handle"
-              />}
+            {!isColumnLayout && (
+                <div className={`resize-handle ${isClicked && "active"}`} onMouseDown={handleMouseDown} data-testid="resize-handle" />
+            )}
 
             {/* HTML Preview */}
             <div
@@ -148,7 +159,12 @@ export const LiveMarkdownPreview = () => {
                 style={{ width: isColumnLayout ? "100%" : `calc(100% - ${leftWidth}px)`, height: isColumnLayout ? "50vh" : "100vh" }}
             >
                 <h2>Preview</h2>
-                <div className="box-markdown_insert-html" dangerouslySetInnerHTML={{ __html: htmlContent }} data-testid="preview-content" />
+                <div
+                    className="box-markdown_insert-html"
+                    dangerouslySetInnerHTML={{ __html: htmlContent }}
+                    data-testid="preview-content"
+                    style={{ whiteSpace: "pre-wrap" }} // Preserve whitespace and line breaks
+                />
             </div>
 
             {/* Reset Button */}
