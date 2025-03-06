@@ -1,0 +1,14 @@
+:root {
+    --dark: #121212;
+    --dark-ms: #232323;
+    --dark-sm: #191818;
+    --dark-dm: #343434;
+    --light: #fff;
+    --gray: #666666;
+    --gray-sm: #888;
+    --gray-ms: #555;
+    --gray-dm: #575757;
+    --gray-md: #2e2e2e;
+    --link-color: #c9a7a7;
+    --border-radius: 8px;
+}

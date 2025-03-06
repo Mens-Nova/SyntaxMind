@@ -18,6 +18,9 @@ export const LiveMarkdownPreview = () => {
     const [hasResized, setHasResized] = useState(false);
     const [htmlContent, setHtmlContent] = useState("");
     const [initialRatio, setInitialRatio] = useState(0.5);
+    const [isClicked, setIsClicked] = useState(false);
+    // [TODO]:  Add animation on reset resize
+    //const [isReseting, setIsReseting] = useState(false);
 
     const MIN_WIDTH = 400;
     const DEFAULT_WIDTH = window.innerWidth * initialRatio;
@@ -28,6 +31,7 @@ export const LiveMarkdownPreview = () => {
         e.preventDefault();
         setIsResizing(true);
         setHasResized(true);
+        setIsClicked(true);
     };
 
     const handleMouseMove = useCallback(
@@ -41,7 +45,10 @@ export const LiveMarkdownPreview = () => {
         [isResizing, isColumnLayout],
     );
 
-    const handleMouseUp = useCallback(() => setIsResizing(false), []);
+    const handleMouseUp = useCallback(() => {
+        setIsResizing(false);
+        setIsClicked(false);
+    }, []);
 
     const handleReset = () => {
         setLeftWidth(window.innerWidth * 0.5);
@@ -127,7 +134,10 @@ export const LiveMarkdownPreview = () => {
             {/* Markdown Input */}
             <div
                 className="box-markdown_input"
-                style={{ width: isColumnLayout ? "100%" : `${leftWidth}px`, height: isColumnLayout ? "50vh" : "100vh" }}
+                style={{
+                    width: isColumnLayout ? "100%" : `${leftWidth}px`,
+                    height: isColumnLayout ? "50vh" : "100vh",
+                }}
             >
                 <h2>Editor</h2>
                 <textarea
@@ -139,7 +149,9 @@ export const LiveMarkdownPreview = () => {
             </div>
 
             {/* Resize Handle */}
-            {!isColumnLayout && <div className="resize-handle" onMouseDown={handleMouseDown} data-testid="resize-handle" />}
+            {!isColumnLayout && (
+                <div className={`resize-handle ${isClicked && "active"}`} onMouseDown={handleMouseDown} data-testid="resize-handle" />
+            )}
 
             {/* HTML Preview */}
             <div

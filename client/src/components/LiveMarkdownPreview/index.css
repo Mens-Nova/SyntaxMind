@@ -1,9 +1,36 @@
+/* ###### Scrollbar ###### */
+
+/* Width */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: var(--gray);
+    border-radius: var(--border-radius);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--gray-sm);
+    border-radius: var(--border-radius);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-ms);
+}
+
+/* ###### Editor ###### */
 .box-container {
     display: flex;
     height: 100vh;
     padding: 20px;
     gap: 5px;
     position: relative;
+    background-color: var(--dark);
 }
 
 .box-container .resize-reset_button {
@@ -11,33 +38,39 @@
     bottom: 40px;
     right: 40px;
     padding: 10px 30px;
-    color: #7606c2;
+    background-color: var(--dark-sm);
+    color: var(--light);
     font-weight: bold;
-    background-color: rgba(120, 4, 195, 0.1);
-    border: 1px solid #7606c2;
-    font-size: 30px;
-    border-radius: 20px;
+    font-size: 22px;
+    outline: none;
+    border: none;
+    border-radius: var(--border-radius);
     cursor: pointer;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
 }
 
-/* MARKDOWN INPUT */
+.box-container .resize-reset_button:hover {
+    opacity: 1;
+}
+
+/* ####### EDITOR > Input ###### */
 .box-markdown_input {
     min-width: 200px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     padding: 20px;
     max-height: 100%;
-    border: 1px solid #ccc;
-    background-color: #fafbfc;
+    background-color: var(--dark-ms);
     overflow: hidden;
 }
 
 .box-markdown_input > h2 {
     font-size: 20px;
-    background-color: #232323;
+    background-color: var(--dark-sm);
     color: #fff;
     width: fit-content;
     padding: 10px 30px;
-    border-radius: 20px;
+    border-radius: var(--border-radius);
 }
 
 .box-markdown_input > textarea {
@@ -47,30 +80,29 @@
     border: none;
     resize: none;
     font-size: 24px;
+    color: var(--light);
     background-color: transparent;
     margin-top: 30px;
     padding: 10px 0;
-    font-family: monospace; /* Matches code style */
 }
 
-/* MARKDOWN PREVIEW */
+/* ###### PREVIEW ###### */
 .box-markdown_preview {
     min-width: 200px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     max-height: 100%;
     padding: 20px;
-    border: 1px solid #c898e5;
-    background-color: #f9eefb;
-    color: #b874dd;
+    background-color: var(--dark-dm);
+    color: var(--light);
 }
 
 .box-markdown_preview > h2 {
-    color: #fff;
-    background-color: #7606c2;
     width: fit-content;
+    color: var(--light);
+    background-color: var(--dark-sm);
     font-size: 20px;
     padding: 10px 30px;
-    border-radius: 20px;
+    border-radius: var(--border-radius);
 }
 
 .box-markdown_insert-html {
@@ -81,181 +113,93 @@
     overflow-y: auto;
     font-size: 24px;
     margin-top: 30px;
-    border: 1px solid blue;
-    padding: 20px;
+    padding: 10px;
+}
+/* ###### SPECIFIC MARKDOWN STYLES ######*/
+ol {
+    padding-left: 65px;
+    height: fit-content;
+    background-color: var(--gray-md);
+}
+ul {
+    padding-left: 50px;
+    background-color: var(--gray-md);
+    border-radius: 20px;
+}
+.box-markdown_insert-html a {
+    color: var(--link-color);
+}
+blockquote {
+    padding-left: 60px;
+    background-color: var(--gray-md);
+    border-radius: var(--border-radius);
+    position: relative;
+    overflow: hidden;
+}
+blockquote::before {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: var(--gray-dm);
 }
 
-.box-markdown_insert-html p code {
-    background-color: #ccc;
-    color: red;
-    padding: 0 10px;
+.box-markdown_insert-html pre {
+    background: var(--gray-dm);
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
 }
 
-/* ########## Highlight Syntax Colors ##########*/
-
-/* Container for the code block */
-pre {
-    background-color: #1e1e1e; /* Dark background */
-    padding: 16px; /* Padding around the code */
-    border-radius: 6px; /* Rounded corners */
-    overflow-x: auto; /* Horizontal scrolling for long lines */
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; /* Monospace font */
-    font-size: 24px; /* Font size */
-    line-height: 1.5; /* Line height */
-    color: #d4d4d4; /* Default text color */
-    margin: 0 0 16px 0; /* Margin at the bottom */
-    border: 1px solid #333; /* Dark border */
-}
-
-/* Syntax highlighting for JavaScript */
-.language-javascript {
-    background-color: transparent; /* No background for code inside <pre> */
-    padding: 0; /* No padding for code inside <pre> */
-    border: none; /* No border for code inside <pre> */
-    color: inherit; /* Inherit text color from <pre> */
-    font-family: inherit; /* Inherit monospace font from <pre> */
-    font-size: inherit; /* Inherit font size from <pre> */
-}
-
-/* Keywords (e.g., function, return, if, else) */
-.language-javascript .token.keyword {
-    color: #569cd6; /* Blue */
-}
-
-/* Strings (e.g., "Hello, world!") */
-.language-javascript .token.string {
-    color: #ce9178; /* Orange */
-}
-
-/* Functions and method names */
-.language-javascript .token.function {
-    color: #dcdcaa; /* Yellow */
-}
-
-/* Numbers (e.g., 42, 3.14) */
-.language-javascript .token.number {
-    color: #b5cea8; /* Green */
-}
-
-/* Operators (e.g., +, -, *, /) */
-.language-javascript .token.operator {
-    color: #d4d4d4; /* Light gray */
-}
-
-/* Comments (e.g., // This is a comment) */
-.language-javascript .token.comment {
-    color: #6a9955; /* Green */
-    font-style: italic; /* Italicize comments */
-}
-
-/* Punctuation (e.g., {}, (), [], ;) */
-.language-javascript .token.punctuation {
-    color: #d4d4d4; /* Light gray */
-}
-
-/* Variables and identifiers */
-.language-javascript .token.variable {
-    color: #9cdcfe; /* Light blue */
-}
-
-/* Class names */
-.language-javascript .token.class-name {
-    color: #4ec9b0; /* Teal */
-}
-
-/*IDK WHAT IS THIS I JUST COPY THIS FOR FUTURE USE*/
-.hljs-comment,
-.hljs-quote {
-    color: #6a737d;
-    font-style: italic;
-}
-
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-subst {
-    color: #7606c2; /* Matches your purple theme */
-}
-
-.hljs-number,
-.hljs-literal,
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag .hljs-attr {
-    color: #005cc5;
-}
-
-.hljs-string,
-.hljs-doctag {
-    color: #b874dd; /* Matches preview text color */
-}
-
-.hljs-title,
-.hljs-section,
-.hljs-selector-id {
-    color: #6f42c1;
-    font-weight: bold;
-}
-
-.hljs-subst {
-    font-weight: normal;
-}
-
-.hljs-type,
-.hljs-class .hljs-title {
-    color: #6f42c1;
-}
-
-.hljs-tag,
-.hljs-name,
-.hljs-attribute {
-    color: #22863a;
-}
-
-.hljs-regexp,
-.hljs-link {
-    color: #032f62;
-}
-
-.hljs-symbol,
-.hljs-bullet {
-    color: #e36209;
-}
-
-.hljs-built_in,
-.hljs-builtin-name {
-    color: #6f42c1;
-}
-
-.hljs-meta {
-    color: #6a737d;
-}
-
-.hljs-deletion {
-    background: #ffeef0;
-}
-
-.hljs-addition {
-    background: #f0fff4;
-}
-
-.hljs-emphasis {
-    font-style: italic;
-}
-
-.hljs-strong {
-    font-weight: bold;
+.box-markdown_insert-html code {
+    background: var(--gray-dm);
+    padding: 2px 4px;
+    border-radius: 3px;
 }
 
 /* RESIZE HANDLE */
 .resize-handle {
-    width: 10px;
+    width: 5px;
     cursor: ew-resize;
-    background-color: rgba(0, 0, 0, 0.2);
-    transition: background-color 0.2s;
+    background-color: transparent;
+    position: relative;
 }
 
-.resize-handle:hover {
-    background-color: rgba(0, 0, 0, 0.4);
+.resize-handle::before {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 120px;
+    border-radius: 30px;
+    background-color: var(--dark);
+    border: 1px solid #ffffff6d;
+    right: -15px;
+    top: 47%;
+    transition: all 0.3s ease;
+}
+
+.resize-handle::after {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 60px;
+    border-radius: 30px;
+    background-color: #ffffff23;
+    right: -7px;
+    top: 51.5%;
+    transition: all 0.3s ease;
+}
+
+.resize-handle:hover::after,
+.resize-handle.active::after {
+    background-color: var(--light);
+}
+
+.resize-handle:hover::before,
+.resize-handle.active::before {
+    border: 1px solid var(--light);
 }
 
 /* MOBILE LAYOUT */
