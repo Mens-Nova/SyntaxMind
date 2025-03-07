@@ -30,5 +30,9 @@ export const WordAndCharCounter = ({ htmlContent }: WordAndCharCounterProps) => 
 
     console.log(charCount, wordCount);
     // [TODO]: Implement the counter (already working)
-    return <></>;
+    return (
+        <>
+            <div></div>
+        </>
+    );
 };

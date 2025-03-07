@@ -187,7 +187,7 @@ blockquote::before {
     height: 60px;
     border-radius: 30px;
     background-color: #ffffff23;
-    right: -7px;
+    right: -6px;
     top: 50.5%;
     transition: all 0.3s ease;
 }
