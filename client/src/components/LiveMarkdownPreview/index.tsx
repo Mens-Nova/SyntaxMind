@@ -127,17 +127,17 @@ export const LiveMarkdownPreview = () => {
         }
     }, [leftWidth, hasResized]);
 
-    useEffect(() => {
-        const observer = new ResizeObserver(() => {
-            if (markdownContainerRef.current) setIsSmall(markdownContainerRef.current.clientWidth < 530);
-        });
+    // useEffect(() => {
+    //     const observer = new ResizeObserver(() => {
+    //         if (markdownContainerRef.current) setIsSmall(markdownContainerRef.current.clientWidth < 530);
+    //     });
 
-        if (markdownContainerRef.current) observer.observe(markdownContainerRef.current);
+    //     if (markdownContainerRef.current) observer.observe(markdownContainerRef.current);
 
-        return () => {
-            observer.disconnect();
-        };
-    }, []);
+    //     return () => {
+    //         observer.disconnect();
+    //     };
+    // }, []);
 
     return (
         <div
@@ -146,8 +146,6 @@ export const LiveMarkdownPreview = () => {
             style={{ flexDirection: isColumnLayout ? "column" : "row", position: "relative" }}
             data-testid="markdown-container"
         >
-            {/* Markdown Input */}
-            {console.log(isSmall)}
             <div
                 className={`box-markdown_input ${isSmall ? "small" : ""}`}
                 style={{
@@ -157,7 +155,7 @@ export const LiveMarkdownPreview = () => {
             >
                 <div className="header-container">
                     <h2>Editor</h2>
-                    <WordAndCharCounter htmlContent={htmlContent} />
+                    {/* <WordAndCharCounter htmlContent={htmlContent} /> */}
                 </div>
                 <textarea
                     value={markdown}

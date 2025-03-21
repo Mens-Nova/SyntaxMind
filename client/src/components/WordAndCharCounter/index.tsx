@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { htmlParser } from "../../lib/htmlParser";
 import "./index.css";
 
@@ -33,13 +33,13 @@ export const WordAndCharCounter = ({ htmlContent }: WordAndCharCounterProps) => 
     console.log(charCount, wordCount);
     // [TODO]: Implement the counter (already working)
     return (
-        <>
+        <div>
             <div className="test-container">
                 <p>Characters: {charCount} </p>
             </div>
             <div className="test-container">
                 <p>Words: {wordCount} </p>
             </div>
-        </>
+        </div>
     );
 };
