@@ -5,10 +5,6 @@
 /* Global variables */
 @import url("./variables.global.css");
 
-/* Components */
-@import url("./components/LiveMarkdownPreview/index.css");
-@import url("./components/WordAndCharCounter/index.css");
-
 /* General Styles */
 * {
     padding: 0;

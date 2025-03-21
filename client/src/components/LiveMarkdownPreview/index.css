@@ -64,7 +64,17 @@
     overflow: hidden;
 }
 
-.box-markdown_input > h2 {
+.box-markdown_input .header-container {
+    display: flex;
+    align-items: end;
+    gap: 30px;
+    border: 1px solid red;
+}
+.box-markdown_input.small .header-container {
+    background-color: red;
+}
+
+.box-markdown_input .header-container > h2 {
     font-size: 20px;
     background-color: var(--dark-sm);
     color: #fff;
