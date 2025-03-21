@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import hljs from "highlight.js";
+import { WordAndCharCounter } from "../WordAndCharCounter";
+import "./index.css";
 
 declare module "marked" {
     interface MarkedOptions {
@@ -11,6 +13,7 @@ declare module "marked" {
 
 export const LiveMarkdownPreview = () => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const markdownContainerRef = useRef<HTMLDivElement>(null);
     const [markdown, setMarkdown] = useState("");
     const [leftWidth, setLeftWidth] = useState(window.innerWidth / 2);
     const [isResizing, setIsResizing] = useState(false);
@@ -19,7 +22,8 @@ export const LiveMarkdownPreview = () => {
     const [htmlContent, setHtmlContent] = useState("");
     const [initialRatio, setInitialRatio] = useState(0.5);
     const [isClicked, setIsClicked] = useState(false);
-    // [TODO]:  Add animation on reset resize
+    const [isSmall, setIsSmall] = useState(false);
+    // [TODO]:  Add animation olllmmn reset resize
     //const [isReseting, setIsReseting] = useState(false);
 
     const MIN_WIDTH = 400;
@@ -107,7 +111,6 @@ export const LiveMarkdownPreview = () => {
 
         const renderMarkdown = async () => {
             const parsedMarkdown = await marked(markdown);
-            console.log(parsedMarkdown);
             const sanitizedHtml = DOMPurify.sanitize(parsedMarkdown);
             if (isMounted) setHtmlContent(sanitizedHtml);
         };
@@ -124,6 +127,18 @@ export const LiveMarkdownPreview = () => {
         }
     }, [leftWidth, hasResized]);
 
+    // useEffect(() => {
+    //     const observer = new ResizeObserver(() => {
+    //         if (markdownContainerRef.current) setIsSmall(markdownContainerRef.current.clientWidth < 530);
+    //     });
+
+    //     if (markdownContainerRef.current) observer.observe(markdownContainerRef.current);
+
+    //     return () => {
+    //         observer.disconnect();
+    //     };
+    // }, []);
+
     return (
         <div
             ref={containerRef}
@@ -131,15 +146,17 @@ export const LiveMarkdownPreview = () => {
             style={{ flexDirection: isColumnLayout ? "column" : "row", position: "relative" }}
             data-testid="markdown-container"
         >
-            {/* Markdown Input */}
             <div
-                className="box-markdown_input"
+                className={`box-markdown_input ${isSmall ? "small" : ""}`}
                 style={{
                     width: isColumnLayout ? "100%" : `${leftWidth}px`,
                     height: isColumnLayout ? "50vh" : "100vh",
                 }}
             >
-                <h2>Editor</h2>
+                <div className="header-container">
+                    <h2>Editor</h2>
+                    {/* <WordAndCharCounter htmlContent={htmlContent} /> */}
+                </div>
                 <textarea
                     value={markdown}
                     onChange={(e) => setMarkdown(e.target.value)}
@@ -163,7 +180,7 @@ export const LiveMarkdownPreview = () => {
                     className="box-markdown_insert-html"
                     dangerouslySetInnerHTML={{ __html: htmlContent }}
                     data-testid="preview-content"
-                    style={{ whiteSpace: "pre-wrap" }} // Preserve whitespace and line breaks
+                    style={{ whiteSpace: "pre-wrap" }}
                 />
             </div>
 

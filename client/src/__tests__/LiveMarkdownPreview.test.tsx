@@ -6,6 +6,7 @@ import { LiveMarkdownPreview } from "../components/LiveMarkdownPreview";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 // Mock dependencies
+jest.mock("../components/LiveMarkdownPreview/index.css", () => ({}));
 jest.mock("marked", () => {
     const markedMock = jest.fn((markdown: string) => `<mocked-html>${markdown}</mocked-html>`) as jest.Mock & {
         setOptions: jest.Mock;

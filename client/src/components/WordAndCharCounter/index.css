@@ -1,0 +1,6 @@
+.test-container {
+    color: var(--light);
+    padding: 5px 15px;
+    background-color: var(--dark-sm);
+    border: var(--border-radius);
+}
