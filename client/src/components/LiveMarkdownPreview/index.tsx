@@ -24,7 +24,7 @@ export const LiveMarkdownPreview = () => {
     const [isClicked, setIsClicked] = useState(false);
     const [isSmall, setIsSmall] = useState(false);
     // [TODO]:  Add animation olllmmn reset resize
-    //const [isReseting, setIsReseting] = useState(false);
+    // const [isReseting, setIsReseting] = useState(false);
 
     const MIN_WIDTH = 400;
     const DEFAULT_WIDTH = window.innerWidth * initialRatio;
@@ -155,7 +155,7 @@ export const LiveMarkdownPreview = () => {
             >
                 <div className="header-container">
                     <h2>Editor</h2>
-                    {/* <WordAndCharCounter htmlContent={htmlContent} /> */}
+                    <WordAndCharCounter htmlContent={htmlContent} />
                 </div>
                 <textarea
                     value={markdown}

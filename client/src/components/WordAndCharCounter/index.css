@@ -1,6 +1,10 @@
-.test-container {
+.counter-card {
     color: var(--light);
     padding: 5px 15px;
     background-color: var(--dark-sm);
-    border: var(--border-radius);
+    border-radius: var(--border-radius);
+}
+.counter-container {
+    display: flex;
+    gap: 1rem;
 }

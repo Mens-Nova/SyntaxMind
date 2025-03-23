@@ -31,13 +31,12 @@ export const WordAndCharCounter = ({ htmlContent }: WordAndCharCounterProps) => 
     }, [htmlContent]);
 
     console.log(charCount, wordCount);
-    // [TODO]: Implement the counter (already working)
     return (
-        <div>
-            <div className="test-container">
+        <div className="counter-container">
+            <div className="counter-card">
                 <p>Characters: {charCount} </p>
             </div>
-            <div className="test-container">
+            <div className="counter-card">
                 <p>Words: {wordCount} </p>
             </div>
         </div>
